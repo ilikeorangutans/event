@@ -6,7 +6,9 @@ import (
 
 // An entity that emits events to subscribed listeners
 type SubscriberUnsubscriber interface {
+	// Add the given listener to the subscribers.
 	Subscribe(event.Listener)
+	// Unsubscribe the given listener.
 	Unsubscribe(event.Listener)
 }
 
@@ -25,6 +27,7 @@ func NewObservable() Observable {
 	return &observableSupportImpl{}
 }
 
+// Private implementation that implements Observable
 type observableSupportImpl struct {
 	subscribers []event.Listener
 }

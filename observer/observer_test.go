@@ -5,14 +5,6 @@ import (
 	"testing"
 )
 
-func TestFoo(t *testing.T) {
-
-	oh := NewObservable()
-
-	oh.Announce(event.NewEvent("type", nil))
-	println(oh)
-}
-
 type TestListener struct {
 	numEvents int
 }
@@ -23,15 +15,33 @@ func (tl *TestListener) OnEvent(e event.Event) bool {
 }
 
 func TestSubscribe(t *testing.T) {
-
-	tl := &TestListener{}
 	oh := NewObservable()
 
-	oh.Subscribe(tl)
+	tl1 := &TestListener{}
+	oh.Subscribe(tl1)
+	tl2 := &TestListener{}
+	oh.Subscribe(tl2)
+
 	oh.Announce(event.NewEvent("type", nil))
 
-	if tl.numEvents != 1 {
+	if tl1.numEvents != 1 || tl2.numEvents != 1 {
 		t.Error("We should have received one event")
 	}
+}
 
+func TestUnsubscribe(t *testing.T) {
+	oh := NewObservable()
+
+	tl1 := &TestListener{}
+	oh.Subscribe(tl1)
+	tl2 := &TestListener{}
+	oh.Subscribe(tl2)
+
+	oh.Unsubscribe(tl1)
+
+	oh.Announce(event.NewEvent("type", nil))
+
+	if tl1.numEvents != 0 || tl2.numEvents != 1 {
+		t.Error("We should have received one event")
+	}
 }
