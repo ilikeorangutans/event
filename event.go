@@ -45,3 +45,11 @@ func (e *eventImpl) Source() interface{} {
 func (e *eventImpl) String() string {
 	return fmt.Sprintf("EventImpl{type=%s}", e.eventType)
 }
+
+// Helper listener that will log all events.
+type LoggingListener struct{}
+
+func (ll *LoggingListener) OnEvent(e Event) bool {
+	fmt.Println(e)
+	return false
+}
