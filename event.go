@@ -8,17 +8,9 @@ import (
 type Event interface {
 	// Returns the source of this event. Might return nil.
 	Source() interface{}
-	// Returns a string describing the event type.
+	// Returns a string identifying the event type.
 	Type() string
 }
-
-// Describes an event listener.
-type Listener interface {
-	// Callback called for events. Returns true if event handling should stop after this handler.
-	OnEvent(Event) bool
-}
-
-type ListenerFunc func(Event) bool
 
 // Creates a new event instance.
 func NewEvent(t string, source interface{}) Event {
